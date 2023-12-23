@@ -62,6 +62,12 @@ body {
     margin: 0 0.5rem;
 }
 
+svg {
+    margin: 0 0.5rem;
+    width: 0.8em;
+    height: 0.8em;
+}
+
 .box>div>.separator {
     --marg-top: 0.5rem;
     background-color: var(--main-color);
@@ -143,6 +149,7 @@ form {
 input[type=text],
 input[type=number] {
     padding: 0.1rem;
+    margin: 0.15rem;
     background: var(--bg-color);
     outline: none;
     border: none;

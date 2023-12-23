@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "@remix-run/react";
 
-export default function Board() {
+import { DocumentData, collection, getDocs } from "firebase/firestore";
+import { db } from "firebase/firebase-config.js";
+
+import type { LinksFunction } from "@remix-run/node";
+
+import root from "app/styles/root_styles.css";
+import styles from "app/styles/style.css";
+
+export const links: LinksFunction = () => [
+    { rel: "stylesheet", href: root },
+    { rel: "stylesheet", href: styles },
+];
+
+export default function BoardCreate() {
     return (
-        <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-            <h1>Hello World</h1>
+        <div className="box">
+            <p>new board</p>
+            <input type="text" name="boardName" id="" />
+            <input type="text" name="ownerName" id="" />
+            <button>create</button>
         </div>
     );
 }

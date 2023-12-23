@@ -1,33 +1,38 @@
-export default function BoardNavbar() {
+import { DocumentData } from "firebase/firestore";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHashtag, faTag, faQuestionCircle, faRandom, faUser, faCog } from '@fortawesome/free-solid-svg-icons'
+
+export default function BoardNavbar({ board }: DocumentData) {
     return (
         <div className="box">
             <div className="board_info">
                 <p className="important">
-                    <i className="fa fa-hashtag" aria-hidden="true"></i>
-                    xuvh...
+                    <FontAwesomeIcon icon={faHashtag} />
+                    {board?.boardID?.slice(0, 5)}...
                 </p>
                 <p>
-                    <i className="fa fa-tag" aria-hidden="true"></i>
-                    jimmy's jimm
+                    <FontAwesomeIcon icon={faTag} />
+                    {board?.name}
                 </p>
                 <div className="separator"></div>
                 <p>
-                    <i className="fa fa-question-circle" aria-hidden="true"></i>
-                    by jimmy himself
+                    <FontAwesomeIcon icon={faQuestionCircle} />
+                    by {board?.owner}
                 </p>
                 <p>
-                    <i className="fa fa-random" aria-hidden="true"></i>
-                    111 participants
+                    <FontAwesomeIcon icon={faRandom} />
+                    {board?.participants} participants
                 </p>
             </div>
             <div className="self_info">
                 <p>
-                    <i className="fa fa-user" aria-hidden="true"></i>
+                    <FontAwesomeIcon icon={faUser} />
                     notjim
                 </p>
                 <p>1000 points</p>
                 <p>
-                    <i className="fa fa-cog" aria-hidden="true"></i>
+                    <FontAwesomeIcon icon={faCog} />
                 </p>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "@remix-run/react";
 
 import { DocumentData, collection, getDocs } from "firebase/firestore";
@@ -11,6 +11,9 @@ import type { LinksFunction } from "@remix-run/node";
 import root from "app/styles/root_styles.css";
 import styles from "app/styles/style.css";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHashtag } from '@fortawesome/free-solid-svg-icons'
+
 export const links: LinksFunction = () => [
     { rel: "stylesheet", href: root },
     { rel: "stylesheet", href: styles },
@@ -18,12 +21,15 @@ export const links: LinksFunction = () => [
 
 export default function BoardID() {
     const [entries, setEntries] = useState<DocumentData[]>([]);
+    const [boardData, setBoardData] = useState<Object>();
     const boardID = useParams().id || "";
 
     useEffect(() => {
         const fetchBoardData = async () => {
-            const { entries } = await getBoard(boardID);
+            const { entries, boardData } = await getBoard(boardID);
+
             setEntries(entries);
+            setBoardData(boardData);
         };
 
         fetchBoardData();
@@ -31,10 +37,10 @@ export default function BoardID() {
 
     return (
         <div className="content">
-            <BoardNavbar />
+            <BoardNavbar board={boardData} />
             <div className="board">
                 <div className="entry">
-                    <i className="fa fa-hashtag" aria-hidden="true"></i>
+                    <FontAwesomeIcon icon={faHashtag} />
                     <p>username</p>
                     <p></p>
                     <p>points</p>
@@ -61,7 +67,7 @@ async function getBoard(boardID: string): Promise<BoardState> {
     const collectionRef = collection(db, boardID);
 
     let query, entries: DocumentData[] = [];
-    let boardData: Object = {};
+    let boardData: { [key: string]: any } = {};
 
     try {
         query = await getDocs(collectionRef);
@@ -82,6 +88,8 @@ async function getBoard(boardID: string): Promise<BoardState> {
             entries.push(elem);
         }
     });
+
+    boardData.boardID = boardID;
 
     return { boardData: boardData, entries: entries };
 }
