@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import logo from "public/lbd.png";
 
 export const meta: MetaFunction = () => {
     return [
@@ -10,7 +11,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
     return (
         <div>
-            <img src="../public/lbd.png"></img>
+            <img src={logo}></img>
         </div>
     );
 }
