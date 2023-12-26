@@ -1,8 +1,6 @@
-import { useLoaderData } from "@remix-run/react";
-import type { LinksFunction, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
-
-import { DocumentData, collection, getDocs } from "firebase/firestore";
-import { db } from "../../../firebase/firebase-config";
+import { Form, useActionData, useLoaderData, useNavigation } from "@remix-run/react"
+import { json } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node"
 
 import root from "app/styles/root_styles.css";
 import styles from "app/styles/style.css";
@@ -11,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHashtag } from '@fortawesome/free-solid-svg-icons'
 
 import BoardNavbar from "./navbar";
-import { AddPlayer, createPlayer } from "./addPlayer";
+import { getBoard, createPlayer } from "./board";
 
 export const links: LinksFunction = () => [
     { rel: "stylesheet", href: root },
@@ -25,14 +23,40 @@ export async function loader({
     return board;
 }
 
+/* start addPlayer */
+
 export async function action({
     request,
 }: ActionFunctionArgs) {
     const body = await request.formData();
     const player = await createPlayer(body);
 
-    return player || null;
+    return json(player);
 }
+
+export function AddPlayer({ boardID }: { boardID: string }) {
+    const navigation = useNavigation();
+    const actionData = useActionData<typeof action>();
+
+    return (
+        <Form method="post" action={`/board/${boardID}?index`} navigate={false} className="box" >
+            <fieldset
+                disabled={navigation.state === "submitting"}
+            >
+                <input type="text" name="playerName" placeholder="player name" />
+                <input type="number" name="initPoints" placeholder="initial points" />
+                <input type="hidden" name="boardID" value={boardID} />
+                <button type="submit">{navigation.state === "submitting"
+                    ? "creating player..."
+                    : "create player"}</button>
+
+                { !actionData?.success ? actionData?.error : "success!" }
+            </fieldset>
+        </Form>
+    )
+}
+
+/* end addPlayer */
 
 export default function BoardID() {
     const { entries, boardData } = useLoaderData<typeof loader>();
@@ -54,46 +78,12 @@ export default function BoardID() {
                         <p>{element.ranking}</p>
                         <p>{element.name}</p>
                         <p>{element.quote}</p>
-                        <p>{element.points}</p>
+                        <p>{element.points.length > 18      ? 
+                            Number(element.points).toExponential(2) : 
+                            Number(element.points).toLocaleString()}</p>
                     </div>
                 ))}
             </div>
         </div>
     );
-}
-
-interface BoardState {
-    readonly boardData: Object,
-    readonly entries: DocumentData[],
-}
-
-async function getBoard(boardID: string): Promise<BoardState> {
-    const collectionRef = collection(db, boardID);
-
-    let query, entries: DocumentData[] = [];
-    let boardData: { [key: string]: any } = {};
-
-    try {
-        query = await getDocs(collectionRef);
-        if (query.size === 0) return { boardData: {}, entries: [] };
-    } catch (e) {
-        console.error(e);
-        return { boardData: {}, entries: [] };
-    }
-
-    query.forEach(element => {
-        let elem = element.data();
-
-        if (element.id === "board") {
-            // found the data board element
-            boardData = elem;
-        } else {
-            // append to the list of entries
-            entries.push(elem);
-        }
-    });
-
-    boardData.boardID = boardID;
-
-    return { boardData: boardData, entries: entries };
 }

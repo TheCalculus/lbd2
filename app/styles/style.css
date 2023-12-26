@@ -146,6 +146,12 @@ form {
     margin: 0 auto;
 }
 
+form > fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 input[type=text],
 input[type=number] {
     padding: 0.1rem;
