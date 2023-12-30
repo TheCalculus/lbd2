@@ -1,4 +1,4 @@
-import { Form, useActionData, useLoaderData, useNavigation } from "@remix-run/react"
+import { Form, useActionData, useFetcher, useLoaderData, useNavigation } from "@remix-run/react"
 import { json } from "@remix-run/node";
 import type { LinksFunction, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node"
 
@@ -23,23 +23,35 @@ export async function loader({
     return board;
 }
 
-/* start addPlayer */
-
 export async function action({
     request,
 }: ActionFunctionArgs) {
     const body = await request.formData();
-    const player = await createPlayer(body);
+
+    const playerName = body.get("playerName");
+    const initPoints = body.get("initPoints");
+    const boardID = body.get("boardID");
+
+    if (!playerName || !initPoints || !boardID)
+        return json({ success: false, error: "received null as an argument" });
+
+    if (String(playerName).length > 25)
+        return json({ success: false, error: "player name too long" });
+
+    const player = await
+        createPlayer(String(playerName), Number(initPoints), String(boardID));
 
     return json(player);
 }
 
 export function AddPlayer({ boardID }: { boardID: string }) {
     const navigation = useNavigation();
-    const actionData = useActionData<typeof action>();
+    const fetcher = useFetcher();
+
+    let data = fetcher.data as { success: boolean, error: string };
 
     return (
-        <Form method="post" action={`/board/${boardID}?index`} navigate={false} className="box" >
+        <fetcher.Form method="post" action={`/board/${boardID}?index`} /* navigate={false} */ className="box" >
             <fieldset
                 disabled={navigation.state === "submitting"}
             >
@@ -49,14 +61,11 @@ export function AddPlayer({ boardID }: { boardID: string }) {
                 <button type="submit">{navigation.state === "submitting"
                     ? "creating player..."
                     : "create player"}</button>
-
-                { !actionData?.success ? actionData?.error : "success!" }
             </fieldset>
-        </Form>
+            <span className="formError">{!data?.success ? data?.error : null}</span>
+        </fetcher.Form>
     )
 }
-
-/* end addPlayer */
 
 export default function BoardID() {
     const { entries, boardData } = useLoaderData<typeof loader>();
@@ -78,8 +87,8 @@ export default function BoardID() {
                         <p>{element.ranking}</p>
                         <p>{element.name}</p>
                         <p>{element.quote}</p>
-                        <p>{element.points.length > 18      ? 
-                            Number(element.points).toExponential(2) : 
+                        <p>{element.points.length >= 18 ?
+                            Number(element.points).toExponential(2) :
                             Number(element.points).toLocaleString()}</p>
                     </div>
                 ))}

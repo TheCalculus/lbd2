@@ -176,3 +176,7 @@ button {
 button:hover {
     color: var(--text-color);
 }
+
+.formError {
+    color: red;
+}

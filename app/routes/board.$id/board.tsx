@@ -47,13 +47,9 @@ export async function getBoard(boardID: string): Promise<BoardState> {
     return { boardData: boardData, entries: entries };
 }
 
-export async function createPlayer(body: FormData) {
-    const playerName = body.get("playerName");
-    const initalPoints = body.get("initPoints");
-    const boardID = body.get("boardID");
-
+export async function createPlayer(playerName: string, initalPoints: number, boardID: string) {
     const board = collection(db, String(boardID));
-    const q = query(board, where("name", "==", playerName));
+    const q = query(board, where("name", "==", playerName.toString()));
 
     if ((await getDocs(q)).size !== 0) {
         // duplicate username
