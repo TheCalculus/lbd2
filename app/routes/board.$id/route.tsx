@@ -1,4 +1,4 @@
-import { Form, useActionData, useFetcher, useLoaderData, useNavigation } from "@remix-run/react"
+import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react"
 import { json } from "@remix-run/node";
 import type { LinksFunction, LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node"
 
@@ -45,25 +45,21 @@ export async function action({
 }
 
 export function AddPlayer({ boardID }: { boardID: string }) {
-    const navigation = useNavigation();
     const fetcher = useFetcher();
-
     let data = fetcher.data as { success: boolean, error: string };
 
     return (
-        <fetcher.Form method="post" action={`/board/${boardID}?index`} /* navigate={false} */ className="box" >
-            <fieldset
-                disabled={navigation.state === "submitting"}
-            >
+        <>
+            <fetcher.Form method="post" action={`/board/${boardID}?index`} /* navigate={false} */ className="form-box" >
                 <input type="text" name="playerName" placeholder="player name" />
                 <input type="number" name="initPoints" placeholder="initial points" />
                 <input type="hidden" name="boardID" value={boardID} />
-                <button type="submit">{navigation.state === "submitting"
-                    ? "creating player..."
-                    : "create player"}</button>
-            </fieldset>
-            <span className="formError">{!data?.success ? data?.error : null}</span>
-        </fetcher.Form>
+                <button type="submit">create player</button>
+            </fetcher.Form >
+            <div className="modal">
+                <span className="formError">{!data?.success ? data?.error : null}</span>
+            </div>
+        </>
     )
 }
 
@@ -71,28 +67,30 @@ export default function BoardID() {
     const { entries, boardData } = useLoaderData<typeof loader>();
 
     return (
-        <div className="content">
-            <BoardNavbar board={boardData} />
+        <>
             <AddPlayer boardID={(boardData as { boardID: string }).boardID} />
+            <div className="content">
+                <BoardNavbar board={boardData} />
 
-            <div className="board">
-                <div className="entry">
-                    <FontAwesomeIcon icon={faHashtag} />
-                    <p>username</p>
-                    <p></p>
-                    <p>points</p>
-                </div>
-                {entries.map(element => (
-                    <div className="entry" key={element.id}>
-                        <p>{element.ranking}</p>
-                        <p>{element.name}</p>
-                        <p>{element.quote}</p>
-                        <p>{element.points.length >= 18 ?
-                            Number(element.points).toExponential(2) :
-                            Number(element.points).toLocaleString()}</p>
+                <div className="board">
+                    <div className="entry">
+                        <FontAwesomeIcon icon={faHashtag} />
+                        <p>username</p>
+                        <p></p>
+                        <p>points</p>
                     </div>
-                ))}
+                    {entries.map(element => (
+                        <div className="entry" key={element.id}>
+                            <p>{element.ranking}</p>
+                            <p>{element.name}</p>
+                            <p>{element.quote}</p>
+                            <p>{element.points.length >= 18 ?
+                                Number(element.points).toExponential(2) :
+                                Number(element.points).toLocaleString()}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
+        </>
     );
 }
