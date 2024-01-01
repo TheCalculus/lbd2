@@ -69,9 +69,9 @@ export default function BoardID() {
     return (
         <>
             <AddPlayer boardID={(boardData as { boardID: string }).boardID} />
-            <div className="content">
-                <BoardNavbar board={boardData} />
+            <BoardNavbar board={boardData} />
 
+            <div className="content">
                 <div className="board">
                     <div className="entry">
                         <FontAwesomeIcon icon={faHashtag} />

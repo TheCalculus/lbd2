@@ -33,6 +33,16 @@ body {
     padding: 1rem 2rem;
 }
 
+.box {
+    position: fixed;
+    bottom: 0.1rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+    -webkit-box-shadow: 0px 0px 41px -11px var(--sub-color);
+    -moz-box-shadow: 0px 0px 41px -11px var(--sub-color);
+    box-shadow: 0px 0px 41px -11px var(--sub-color);
+}
+
 .form-box {
     display: grid;
     grid-template-rows: repeat(3, 1fr);
