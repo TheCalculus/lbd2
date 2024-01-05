@@ -56,9 +56,9 @@ export function AddPlayer({ boardID }: { boardID: string }) {
                 <input type="hidden" name="boardID" value={boardID} />
                 <button type="submit">create player</button>
             </fetcher.Form >
-            <div className="modal">
+            {/* <div className="modal">
                 <span className="formError">{!data?.success ? data?.error : null}</span>
-            </div>
+            </div> */}
         </>
     )
 }
@@ -68,10 +68,10 @@ export default function BoardID() {
 
     return (
         <>
-            <AddPlayer boardID={(boardData as { boardID: string }).boardID} />
             <BoardNavbar board={boardData} />
 
             <div className="content">
+                <AddPlayer boardID={(boardData as { boardID: string }).boardID} />
                 <div className="board">
                     <div className="entry">
                         <FontAwesomeIcon icon={faHashtag} />
@@ -89,6 +89,9 @@ export default function BoardID() {
                                 Number(element.points).toLocaleString()}</p>
                         </div>
                     ))}
+                </div>
+                <div>
+                    even more content
                 </div>
             </div>
         </>

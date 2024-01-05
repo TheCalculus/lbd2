@@ -7,16 +7,17 @@ body {
 }
 
 .content {
-    max-width: 1000px;
     max-height: 100vh;
     height: calc(100% - 4rem);
-    margin: 0 auto;
-    padding: 2rem;
     align-items: center;
     display: grid;
     gap: 2rem;
-    grid-auto-flow: row;
-    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: minmax(5%, 1fr) auto minmax(5%, 1fr);
+}
+
+.board {
+    height: 100%;
+    overflow-y: scroll;
 }
 
 .box,
@@ -41,16 +42,6 @@ body {
     -webkit-box-shadow: 0px 0px 41px -11px var(--sub-color);
     -moz-box-shadow: 0px 0px 41px -11px var(--sub-color);
     box-shadow: 0px 0px 41px -11px var(--sub-color);
-}
-
-.form-box {
-    display: grid;
-    grid-template-rows: repeat(3, 1fr);
-    height: 7rem;
-    position: fixed;
-    top: 10%;
-    left: 10%;
-    transform: translate(-10%, -10%);
 }
 
 .form-box>button {
