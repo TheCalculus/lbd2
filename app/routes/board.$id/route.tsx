@@ -68,15 +68,12 @@ export default function BoardID() {
 
     return (
         <>
-            <BoardNavbar board={boardData} />
-
-            <div className="content">
-                <AddPlayer boardID={(boardData as { boardID: string }).boardID} />
-                <div className="board">
+            <div className="container">
+                <div className="board-content">
                     <div className="entry">
-                        <FontAwesomeIcon icon={faHashtag} />
+                        <p><FontAwesomeIcon icon={faHashtag} /></p>
                         <p>username</p>
-                        <p></p>
+                        <p>{/* player description / flare */}</p>
                         <p>points</p>
                     </div>
                     {entries.map(element => (
@@ -90,8 +87,14 @@ export default function BoardID() {
                         </div>
                     ))}
                 </div>
-                <div>
-                    even more content
+                <div className="chat-content">
+                    {entries.map((element, index) => (
+                        <p><span>[{new Date().getTime()}]</span> chat message {index}!!</p>
+                    ))}
+                </div>
+                <div className="board-info">
+                    <BoardNavbar board={boardData} />
+                    <AddPlayer boardID={(boardData as { boardID: string }).boardID} />
                 </div>
             </div>
         </>

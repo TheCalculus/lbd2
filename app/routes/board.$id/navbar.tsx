@@ -5,11 +5,11 @@ import { faHashtag, faTag, faQuestionCircle, faRandom, faUser, faCog } from '@fo
 
 export default function BoardNavbar({ board }: DocumentData) {
     return (
-        <div className="box">
+        <>
             <div className="board_info">
                 <p className="important">
                     <FontAwesomeIcon icon={faHashtag} />
-                    {board?.boardID?.slice(0, 5)}...
+                    {board?.boardID?.slice(0, 10)}...
                 </p>
                 <p>
                     <FontAwesomeIcon icon={faTag} />
@@ -35,6 +35,6 @@ export default function BoardNavbar({ board }: DocumentData) {
                     <FontAwesomeIcon icon={faCog} />
                 </p>
             </div>
-        </div>
+        </>
     )
 }
