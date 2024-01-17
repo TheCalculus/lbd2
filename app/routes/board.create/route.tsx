@@ -16,11 +16,13 @@ export const links: LinksFunction = () => [
 
 export default function BoardCreate() {
     return (
-        <div className="box">
-            <p>new board</p>
-            <input type="text" name="boardName" id="" />
-            <input type="text" name="ownerName" id="" />
-            <button>create</button>
+        <div className="modal">
+            <form method="post" action="/board/create?index" className="form-box">
+                <p>new board</p>
+                <input type="text" name="boardName" id="" placeholder="board name" />
+                <input type="text" name="ownerName" id="" placeholder="owner uname" />
+                <button>create</button>
+            </form>
         </div>
     );
 }

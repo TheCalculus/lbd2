@@ -1,7 +1,8 @@
-import { DocumentData, collection, getDocs, setDoc, doc, query, where } from "firebase/firestore";
+import { DocumentData, collection, getDocs, setDoc, doc, query, where, updateDoc, increment } from "firebase/firestore";
 import { db } from "../../../firebase/firebase-config";
 
 import { uuid } from "uuidv4";
+import { FieldValue } from "firebase/firestore/lite";
 
 interface BoardState {
     readonly boardData: Object,
@@ -37,7 +38,7 @@ export async function getBoard(boardID: string): Promise<BoardState> {
     entries = entries.sort((a, b) => {
         return b.points - a.points;
     });
-    
+
     entries.forEach((e, index) => {
         e.ranking = index + 1;
     });
@@ -63,6 +64,10 @@ export async function createPlayer(playerName: string, initalPoints: number, boa
     }).catch(e => {
         console.error(e);
         return { success: false, error: "i think i messed up the server code" };
+    });
+
+    await updateDoc(doc(board, "board"), {
+        participants: increment(1)
     });
 
     return { success: true, error: "none" };

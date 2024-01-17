@@ -3,8 +3,8 @@ import logo from "public/lbd.png";
 
 export const meta: MetaFunction = () => {
     return [
-        { title: "New Remix App" },
-        { name: "description", content: "Welcome to Remix!" },
+        { title: "lbd_v2" },
+        { name: "description", content: "are u and ur friends unhealthily competitive? good cause thats business for us" },
     ];
 };
 
